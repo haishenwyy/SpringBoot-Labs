@@ -22,6 +22,8 @@
         <module>labx-04-sca-sentinel-resttemplate-consumer</module>
 
         <module>labx-04-sca-sentinel-actuator-provider</module>
+
+        <module>labx-04-sca-sentinel-admin-server</module>
     </modules>
 
 
