@@ -28,12 +28,12 @@ spring:
             data-type: json # 数据格式
             rule-type: FLOW # 规则类型
 
-  boot:
-    admin:
-      client:
-        url: http://127.0.0.1:8080 # Spring Boot Admin Server 地址
-        instance:
-          prefer-ip: true # 优先使用 IP 注册
+#  boot:
+#    admin:
+#      client:
+#        url: http://127.0.0.1:8080 # Spring Boot Admin Server 地址
+#        instance:
+#          prefer-ip: true # 优先使用 IP 注册
 
 management:
   endpoints:
@@ -45,3 +45,9 @@ management:
     health:
       enabled: true # 是否开启。默认为 true 开启。
       show-details: ALWAYS # 何时显示完整的健康信息。默认为 NEVER 都不展示。可选 WHEN_AUTHORIZED 当经过授权的用户；可选 ALWAYS 总是展示。
+  metrics:
+    tags: # 通用标签
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
