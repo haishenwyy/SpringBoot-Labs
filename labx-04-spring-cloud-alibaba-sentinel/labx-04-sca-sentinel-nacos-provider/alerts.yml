@@ -1,0 +1,45 @@
+groups:
+  - name: jvm_alerts
+    interval: 30s
+    rules:
+      # JVM 内存使用率过高告警
+      - alert: JVMMemoryHigh
+        expr: |
+          sum(jvm_memory_used_bytes{area="heap"}) / sum(jvm_memory_max_bytes{area="heap"}) * 100 > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "JVM 内存使用率过高"
+          description: "实例 {{ $labels.instance }} 的堆内存使用率超过 80% (当前值: {{ $value }}%)"
+
+      # CPU 使用率过高告警
+      - alert: ProcessCPUHigh
+        expr: process_cpu_usage * 100 > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU 使用率过高"
+          description: "实例 {{ $labels.instance }} 的 CPU目前 使用率超过 70% (当前值: {{ $value }}%)"
+
+      # GC 次数频繁告警
+      - alert: GCFrequent
+        expr: |
+          increase(jvm_gc_pause_seconds_count[1m]) > 10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "GC 次数过于频繁"
+          description: "实例 {{ $labels.instance }} 在过去 1 分钟内 GC 次数超过 10 次 (当前值: {{ $value }}次)"
+
+      # 应用实例健康检查告警
+      - alert: InstanceDown
+        expr: up{job="demo-provider"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "应用实例宕机"
+          description: "实例 {{ $labels.instance }} 已经宕机超过 30 秒"
